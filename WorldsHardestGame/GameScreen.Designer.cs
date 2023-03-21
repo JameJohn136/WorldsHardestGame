@@ -34,7 +34,7 @@
             // 
             // gameLoop
             // 
-            this.gameLoop.Interval = 17;
+            this.gameLoop.Interval = 20;
             this.gameLoop.Tick += new System.EventHandler(this.gameLoop_Tick);
             // 
             // GameScreen

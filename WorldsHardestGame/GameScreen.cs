@@ -13,6 +13,7 @@ namespace WorldsHardestGame
     public partial class GameScreen : UserControl
     {
         Player hero;
+        List<Floor> floors = new List<Floor>();
 
         bool leftArrowDown = false, rightArrowDown = false, upArrowDown = false, downArrowDown = false;
 
@@ -25,18 +26,21 @@ namespace WorldsHardestGame
         public GameScreen()
         {
             InitializeComponent();
-            StartGame();
+            SpawnLevel();
         }
 
 
         public void SpawnLevel()
         {
+            Floor newFloor = new Floor(10, 10, 50, 50);
+            floors.Add(newFloor);
 
+            StartGame();
         }
 
         public void StartGame()
         {
-            hero = new Player(50, 100);
+            hero = new Player(25, 25);
 
             gameLoop.Start();
         }
@@ -62,6 +66,14 @@ namespace WorldsHardestGame
             if (rightArrowDown && hero.x < this.Width - hero.width)
             {
                 hero.Move("right");
+            }
+
+            foreach (Floor floor in floors)
+            {
+                if (hero.Collision(floor))
+                {
+                    //ahh
+                }
             }
 
 
@@ -107,6 +119,11 @@ namespace WorldsHardestGame
         }
         private void GameScreen_Paint(object sender, PaintEventArgs e)
         {
+            foreach(Floor floor in floors)
+            {
+                e.Graphics.FillRectangle(whiteBrush, floor.x, floor.y, floor.width, floor.height);
+            }
+
             e.Graphics.FillRectangle(redBrush, hero.x, hero.y, hero.width, hero.height);
         }
     }

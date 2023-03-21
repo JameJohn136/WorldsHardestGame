@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
 
 namespace WorldsHardestGame
 {
@@ -11,6 +12,7 @@ namespace WorldsHardestGame
         public int x, y;
         public int speed = 6;
         public int width = 15, height = 15;
+        public int PrevX, PrevY;
 
         public Player(int _x, int _y)
         {
@@ -38,6 +40,23 @@ namespace WorldsHardestGame
             {
                 x += speed;
             }
+        }
+
+        public bool Collision(Floor floor)
+        {
+            Rectangle playerRec = new Rectangle(x, y, width, height);
+            Rectangle floorRec = new Rectangle(floor.x, floor.y, floor.width, floor.height);
+
+            if (!playerRec.IntersectsWith(floorRec))
+            {
+                x = PrevX;
+                y = PrevY;
+            }
+
+            PrevX = x;
+            PrevY = y;
+
+            return true;
         }
     }
 }
