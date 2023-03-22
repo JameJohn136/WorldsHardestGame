@@ -14,6 +14,7 @@ namespace WorldsHardestGame
     {
         Player hero;
         List<Floor> floors = new List<Floor>();
+        private int floorsHit;
 
         bool leftArrowDown = false, rightArrowDown = false, upArrowDown = false, downArrowDown = false;
 
@@ -35,8 +36,13 @@ namespace WorldsHardestGame
             Floor newFloor = new Floor(10, 10, 50, 50);
             floors.Add(newFloor);
 
+            newFloor = new Floor(25, 25, 50, 100);
+            floors.Add(newFloor);
+
             StartGame();
         }
+
+
 
         public void StartGame()
         {
@@ -68,13 +74,20 @@ namespace WorldsHardestGame
                 hero.Move("right");
             }
 
+            floorsHit = 0;
             foreach (Floor floor in floors)
             {
+                
                 if (hero.Collision(floor))
                 {
-                    //ahh
+                    floorsHit++;
                 }
             }
+                if (floorsHit == 0)
+                {
+                    hero.x = hero.prevX;
+                    hero.y = hero.prevY;
+                }
 
 
             // End of gameloop Refresh

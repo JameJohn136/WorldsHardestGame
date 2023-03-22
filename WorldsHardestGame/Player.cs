@@ -12,7 +12,7 @@ namespace WorldsHardestGame
         public int x, y;
         public int speed = 6;
         public int width = 15, height = 15;
-        public int PrevX, PrevY;
+        public int prevX, prevY;
 
         public Player(int _x, int _y)
         {
@@ -47,14 +47,15 @@ namespace WorldsHardestGame
             Rectangle playerRec = new Rectangle(x, y, width, height);
             Rectangle floorRec = new Rectangle(floor.x, floor.y, floor.width, floor.height);
 
+            // Check to see if ANY floor is currently active, or else it only allows u in the first one
+
             if (!playerRec.IntersectsWith(floorRec))
             {
-                x = PrevX;
-                y = PrevY;
+                return false;
             }
 
-            PrevX = x;
-            PrevY = y;
+            prevX = x;
+            prevY = y;
 
             return true;
         }
