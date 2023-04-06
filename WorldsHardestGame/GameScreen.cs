@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Worlds Hardest Game Remake By James Johnson
+// Made March 2023
+
+#region System Declarations
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -7,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+#endregion
 
 namespace WorldsHardestGame
 {
@@ -14,15 +19,20 @@ namespace WorldsHardestGame
     {
         Player hero;
         List<Floor> floors = new List<Floor>();
-        private int floorsHit;
+        WinArea winArea;
+        List<Ball> balls = new List<Ball>();
 
         bool leftArrowDown = false, rightArrowDown = false, upArrowDown = false, downArrowDown = false;
 
         Random randGen = new Random();
 
-        SolidBrush greenBrush = new SolidBrush(Color.Green);
+        SolidBrush wallBrush = new SolidBrush(Color.DarkGray);
         SolidBrush redBrush = new SolidBrush(Color.Red);
-        SolidBrush whiteBrush = new SolidBrush(Color.White);
+        SolidBrush ballBrush = new SolidBrush(Color.MediumPurple);
+        SolidBrush greenBrush = new SolidBrush(Color.Green);
+
+        // Sounds
+        
 
         public GameScreen()
         {
@@ -33,11 +43,33 @@ namespace WorldsHardestGame
 
         public void SpawnLevel()
         {
-            Floor newFloor = new Floor(10, 10, 50, 50);
+
+            #region Floor Spawning
+            Floor newFloor = new Floor(0, 0, 600, 25);
             floors.Add(newFloor);
 
-            newFloor = new Floor(25, 25, 50, 100);
+            newFloor = new Floor(0, 25, 25, 600);
             floors.Add(newFloor);
+
+            newFloor = new Floor(0, 475, 450, 25);
+            floors.Add(newFloor);
+
+            newFloor = new Floor(425, 25, 25, 600);
+            floors.Add(newFloor);
+
+            newFloor = new Floor(0, 100, 375, 25);
+            floors.Add(newFloor);
+
+            newFloor = new Floor(575, 600, 25, 600);
+            floors.Add(newFloor);
+            #endregion
+
+            winArea = new WinArea(400, 425, 25);
+
+            #region Ball Spawning
+            Ball newBall = new Ball(250, 250, 25, 0, 10);
+            balls.Add(newBall);
+            #endregion
 
             StartGame();
         }
@@ -54,6 +86,9 @@ namespace WorldsHardestGame
 
         private void gameLoop_Tick(object sender, EventArgs e)
         {
+            hero.prevX = hero.x;
+            hero.prevY = hero.y;
+
             // Player Movement
             if (upArrowDown && hero.y > 0)
             {
@@ -74,20 +109,43 @@ namespace WorldsHardestGame
                 hero.Move("right");
             }
 
-            floorsHit = 0;
+            // Check for collision with walls
             foreach (Floor floor in floors)
             {
-                
                 if (hero.Collision(floor))
-                {
-                    floorsHit++;
-                }
-            }
-                if (floorsHit == 0)
                 {
                     hero.x = hero.prevX;
                     hero.y = hero.prevY;
                 }
+            }
+
+            // Check for collision with balls
+            foreach (Ball ball in balls)
+            {
+                // Move each ball
+                ball.x += ball.xSpeed;
+                ball.y += ball.ySpeed;
+                foreach (Floor floor in floors)
+                {
+                    if (ball.Collision(floor))
+                    {
+                        ball.InvertSpeed();
+                    }
+
+                    if (hero.Collision(ball))
+                    {
+                        hero.Restart();
+                        deathsLabel.Text = $"Deaths: {hero.deaths}";
+                    }
+                }
+
+            }
+
+            // Check for collision with win area
+            if (hero.Collision(winArea))
+            {
+                
+            }
 
 
             // End of gameloop Refresh
@@ -132,11 +190,17 @@ namespace WorldsHardestGame
         }
         private void GameScreen_Paint(object sender, PaintEventArgs e)
         {
-            foreach(Floor floor in floors)
+            foreach (Floor floor in floors)
             {
-                e.Graphics.FillRectangle(whiteBrush, floor.x, floor.y, floor.width, floor.height);
+                e.Graphics.FillRectangle(wallBrush, floor.x, floor.y, floor.width, floor.height);
             }
 
+            foreach (Ball ball in balls)
+            {
+                e.Graphics.FillRectangle(ballBrush, ball.x, ball.y, ball.size, ball.size);
+            }
+
+            e.Graphics.FillRectangle(greenBrush, winArea.x, winArea.y, winArea.size, winArea.size);
             e.Graphics.FillRectangle(redBrush, hero.x, hero.y, hero.width, hero.height);
         }
     }
