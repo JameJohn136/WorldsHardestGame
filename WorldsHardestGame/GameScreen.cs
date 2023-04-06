@@ -62,12 +62,24 @@ namespace WorldsHardestGame
 
             newFloor = new Floor(575, 600, 25, 600);
             floors.Add(newFloor);
+
+            newFloor = new Floor(250, 150, 200, 20);
+            floors.Add(newFloor);
             #endregion
 
             winArea = new WinArea(400, 425, 25);
 
             #region Ball Spawning
             Ball newBall = new Ball(250, 250, 25, 0, 10);
+            balls.Add(newBall);
+
+            newBall = new Ball(220, 25, 10, 0, 4);
+            balls.Add(newBall);
+
+            newBall = new Ball(265, 25, 15, 0, 3);
+            balls.Add(newBall);
+
+            newBall = new Ball(315, 25, 10, 0, 4);
             balls.Add(newBall);
             #endregion
 
@@ -86,6 +98,13 @@ namespace WorldsHardestGame
 
         private void gameLoop_Tick(object sender, EventArgs e)
         {
+            /**
+             * Debug Output for finding the players position, this is to be able to move
+             * to a location in game and see the x and y values for it, making it easier to build the level
+             */
+            posLabel.Text = $"X: {hero.x}\nY: {hero.y}";
+
+
             hero.prevX = hero.x;
             hero.prevY = hero.y;
 
@@ -144,7 +163,9 @@ namespace WorldsHardestGame
             // Check for collision with win area
             if (hero.Collision(winArea))
             {
-                
+                // Play Win Sound
+
+                // Move to win screen
             }
 
 

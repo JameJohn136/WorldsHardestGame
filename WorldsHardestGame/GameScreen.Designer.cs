@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.gameLoop = new System.Windows.Forms.Timer(this.components);
             this.deathsLabel = new System.Windows.Forms.Label();
+            this.posLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // gameLoop
@@ -48,11 +49,21 @@
             this.deathsLabel.TabIndex = 0;
             this.deathsLabel.Text = "Deaths: 0";
             // 
+            // posLabel
+            // 
+            this.posLabel.AutoSize = true;
+            this.posLabel.Location = new System.Drawing.Point(8, 28);
+            this.posLabel.Name = "posLabel";
+            this.posLabel.Size = new System.Drawing.Size(44, 16);
+            this.posLabel.TabIndex = 1;
+            this.posLabel.Text = "label1";
+            // 
             // GameScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
+            this.Controls.Add(this.posLabel);
             this.Controls.Add(this.deathsLabel);
             this.DoubleBuffered = true;
             this.Name = "GameScreen";
@@ -69,5 +80,6 @@
 
         private System.Windows.Forms.Timer gameLoop;
         private System.Windows.Forms.Label deathsLabel;
+        private System.Windows.Forms.Label posLabel;
     }
 }
