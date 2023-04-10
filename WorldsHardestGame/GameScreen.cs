@@ -72,6 +72,15 @@ namespace WorldsHardestGame
 
             newFloor = new Floor(250, 150, 200, 20);
             floors.Add(newFloor);
+
+            newFloor = new Floor(75, 200, 100, 150);
+            floors.Add(newFloor);
+
+            newFloor = new Floor(120, 400, 100, 150);
+            floors.Add(newFloor);
+
+            newFloor = new Floor(50, 400, 100, 50);
+            floors.Add(newFloor);
             #endregion
 
 
@@ -86,6 +95,27 @@ namespace WorldsHardestGame
             balls.Add(newBall);
 
             newBall = new Ball(315, 25, 10, 0, 4);
+            balls.Add(newBall);
+
+            newBall = new Ball(112, 54, 10, 4, 0);
+            balls.Add(newBall);
+
+            newBall = new Ball(112, 150, 20, 4, 0);
+            balls.Add(newBall);
+
+            newBall = new Ball(112, 127, 20, 4, 0);
+            balls.Add(newBall);
+
+            newBall = new Ball(27, 400, 20, 0, 4);
+            balls.Add(newBall);
+
+            newBall = new Ball(250, 350, 10, 2, 2);
+            balls.Add(newBall);
+
+            newBall = new Ball(220, 450, 20, 5, 0);
+            balls.Add(newBall);
+
+            newBall = new Ball(400, 450, 20, 5, 0);
             balls.Add(newBall);
             #endregion
 
@@ -102,7 +132,13 @@ namespace WorldsHardestGame
             #endregion
 
             #region Key Spawning
-            Key key = new Key(250, 250);
+            Key key = new Key(409, 25);
+            keys.Add(key);
+
+            key = new Key(100, 454);
+            keys.Add(key);
+
+            key = new Key(300, 454);
             keys.Add(key);
             #endregion
 
@@ -116,6 +152,10 @@ namespace WorldsHardestGame
         {
             hero = new Player(25, 25);
 
+            hero.currentKeys = 0;
+
+            posLabel.Visible = true;
+
             gameLoop.Start();
         }
 
@@ -125,6 +165,8 @@ namespace WorldsHardestGame
             /**
              * Debug Output for finding the players position, this is to be able to move
              * to a location in game and see the x and y values for it, making it easier to build the level
+             * 
+             * NOTE: This can be toggled off by clicking on the label
              */
             posLabel.Text = $"X: {hero.x}\nY: {hero.y}";
 
@@ -207,6 +249,13 @@ namespace WorldsHardestGame
             // End of gameloop Refresh
             Refresh();
         }
+
+        private void posLabel_Click(object sender, EventArgs e)
+        {
+            // Toggle Debug Text when clicked on
+            posLabel.Visible = false;
+        }
+
         private void GameScreen_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
