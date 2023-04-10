@@ -15,6 +15,7 @@ namespace WorldsHardestGame
         public int prevX, prevY;
         private int startX, startY;
         public int deaths;
+        public int currentKeys;
 
         public Player(int _x, int _y)
         {
@@ -84,6 +85,19 @@ namespace WorldsHardestGame
             Rectangle winRec = new Rectangle(winArea.x, winArea.y, winArea.size, winArea.size);
 
             if (playerRec.IntersectsWith(winRec))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool Collision(Key key)
+        {
+            Rectangle playerRec = new Rectangle(x, y, width, height);
+            Rectangle keyRec = new Rectangle(key.x, key.y, key.size, key.size);
+
+            if (playerRec.IntersectsWith(keyRec))
             {
                 return true;
             }

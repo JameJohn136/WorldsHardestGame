@@ -60,6 +60,7 @@
     <Compile Include="GameScreen.Designer.cs">
       <DependentUpon>GameScreen.cs</DependentUpon>
     </Compile>
+    <Compile Include="Key.cs" />
     <Compile Include="MenuScreen.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -107,6 +108,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\pickupCoin.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Key Sprite.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

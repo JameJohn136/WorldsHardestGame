@@ -21,6 +21,10 @@ namespace WorldsHardestGame
         List<Floor> floors = new List<Floor>();
         WinArea winArea;
         List<Ball> balls = new List<Ball>();
+        List<Key> keys = new List<Key>();
+        List<Rectangle> keySprites = new List<Rectangle>();
+
+        public int totalKeys = 4;
 
         bool leftArrowDown = false, rightArrowDown = false, upArrowDown = false, downArrowDown = false;
 
@@ -32,7 +36,11 @@ namespace WorldsHardestGame
         SolidBrush greenBrush = new SolidBrush(Color.Green);
 
         // Sounds
-        
+
+        // Images
+        Image keySprite;
+        Image nullKeySprite;
+
 
         public GameScreen()
         {
@@ -43,7 +51,6 @@ namespace WorldsHardestGame
 
         public void SpawnLevel()
         {
-
             #region Floor Spawning
             Floor newFloor = new Floor(0, 0, 600, 25);
             floors.Add(newFloor);
@@ -67,7 +74,6 @@ namespace WorldsHardestGame
             floors.Add(newFloor);
             #endregion
 
-            winArea = new WinArea(400, 425, 25);
 
             #region Ball Spawning
             Ball newBall = new Ball(250, 250, 25, 0, 10);
@@ -83,6 +89,24 @@ namespace WorldsHardestGame
             balls.Add(newBall);
             #endregion
 
+
+            #region Key UI
+            for (int i = 0; i < totalKeys; i++)
+            {
+                Rectangle newSprite = new Rectangle(325 + (32 * i), 10, 16, 16);
+                keySprites.Add(newSprite);
+            }
+
+            keySprite = Properties.Resources.keySprite;
+            nullKeySprite = Properties.Resources.nullKeySprite;
+            #endregion
+
+            #region Key Spawning
+            Key key = new Key(250, 250);
+            keys.Add(key);
+            #endregion
+
+            winArea = new WinArea(400, 425, 25);
             StartGame();
         }
 
@@ -135,6 +159,17 @@ namespace WorldsHardestGame
                 {
                     hero.x = hero.prevX;
                     hero.y = hero.prevY;
+                }
+            }
+
+            // Check for collision with keys
+            foreach(Key key in keys)
+            {
+                if (hero.Collision(key))
+                {
+                    hero.currentKeys++;
+                    keys.Remove(key);
+                    break;
                 }
             }
 
@@ -211,10 +246,6 @@ namespace WorldsHardestGame
         }
         private void GameScreen_Paint(object sender, PaintEventArgs e)
         {
-            foreach (Floor floor in floors)
-            {
-                e.Graphics.FillRectangle(wallBrush, floor.x, floor.y, floor.width, floor.height);
-            }
 
             foreach (Ball ball in balls)
             {
@@ -223,6 +254,31 @@ namespace WorldsHardestGame
 
             e.Graphics.FillRectangle(greenBrush, winArea.x, winArea.y, winArea.size, winArea.size);
             e.Graphics.FillRectangle(redBrush, hero.x, hero.y, hero.width, hero.height);
+
+            // Draw Keys
+            foreach(Key key in keys)
+            {
+                e.Graphics.DrawImage(keySprite, key.x, key.y);
+            }
+
+            foreach (Floor floor in floors)
+            {
+                e.Graphics.FillRectangle(wallBrush, floor.x, floor.y, floor.width, floor.height);
+            }
+
+            // Print Keys
+            for (int i = 0; i < totalKeys; i++)
+            {
+                if (i < hero.currentKeys) // if key is found
+                {
+                    e.Graphics.DrawImage(keySprite, keySprites[i]);
+
+                }
+                else
+                {
+                    e.Graphics.DrawImage(nullKeySprite, keySprites[i]);
+                }
+            }
         }
     }
 }
