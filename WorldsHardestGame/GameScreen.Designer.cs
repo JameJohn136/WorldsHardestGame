@@ -32,6 +32,7 @@
             this.gameLoop = new System.Windows.Forms.Timer(this.components);
             this.deathsLabel = new System.Windows.Forms.Label();
             this.posLabel = new System.Windows.Forms.Label();
+            this.backLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // gameLoop
@@ -61,15 +62,26 @@
             this.posLabel.Text = "label1";
             this.posLabel.Click += new System.EventHandler(this.posLabel_Click);
             // 
+            // backLabel
+            // 
+            this.backLabel.AutoSize = true;
+            this.backLabel.Location = new System.Drawing.Point(89, 4);
+            this.backLabel.Name = "backLabel";
+            this.backLabel.Size = new System.Drawing.Size(74, 13);
+            this.backLabel.TabIndex = 2;
+            this.backLabel.Text = "Back to Menu";
+            this.backLabel.Click += new System.EventHandler(this.backLabel_Click);
+            // 
             // GameScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
+            this.Controls.Add(this.backLabel);
             this.Controls.Add(this.posLabel);
             this.Controls.Add(this.deathsLabel);
             this.DoubleBuffered = true;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "GameScreen";
             this.Size = new System.Drawing.Size(450, 488);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.GameScreen_Paint);
@@ -85,5 +97,6 @@
         private System.Windows.Forms.Timer gameLoop;
         private System.Windows.Forms.Label deathsLabel;
         private System.Windows.Forms.Label posLabel;
+        private System.Windows.Forms.Label backLabel;
     }
 }

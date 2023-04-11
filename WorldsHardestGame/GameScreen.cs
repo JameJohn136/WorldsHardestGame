@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Media;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -17,6 +18,7 @@ namespace WorldsHardestGame
 {
     public partial class GameScreen : UserControl
     {
+        #region Global Variables
         Player hero;
         List<Floor> floors = new List<Floor>();
         WinArea winArea;
@@ -28,23 +30,26 @@ namespace WorldsHardestGame
 
         bool leftArrowDown = false, rightArrowDown = false, upArrowDown = false, downArrowDown = false;
 
-        Random randGen = new Random();
-
+        // Brushes
         SolidBrush wallBrush = new SolidBrush(Color.DarkGray);
         SolidBrush redBrush = new SolidBrush(Color.Red);
         SolidBrush ballBrush = new SolidBrush(Color.MediumPurple);
         SolidBrush greenBrush = new SolidBrush(Color.Green);
 
         // Sounds
+        SoundPlayer deathSound = new SoundPlayer(Properties.Resources.deathSound);
+        SoundPlayer winSound = new SoundPlayer(Properties.Resources.winSound);
 
         // Images
         Image keySprite;
         Image nullKeySprite;
-
+        #endregion
 
         public GameScreen()
         {
             InitializeComponent();
+
+            // Start spawning the level
             SpawnLevel();
         }
 
@@ -140,9 +145,12 @@ namespace WorldsHardestGame
 
             key = new Key(300, 454);
             keys.Add(key);
+
+            key = new Key(360, 205);
+            keys.Add(key);
             #endregion
 
-            winArea = new WinArea(400, 425, 25);
+            winArea = new WinArea(400, 425, 0);
             StartGame();
         }
 
@@ -150,6 +158,7 @@ namespace WorldsHardestGame
 
         public void StartGame()
         {
+            // Reset everything
             hero = new Player(25, 25);
 
             hero.currentKeys = 0;
@@ -170,7 +179,7 @@ namespace WorldsHardestGame
              */
             posLabel.Text = $"X: {hero.x}\nY: {hero.y}";
 
-
+            // Get the players previous position
             hero.prevX = hero.x;
             hero.prevY = hero.y;
 
@@ -210,7 +219,15 @@ namespace WorldsHardestGame
                 if (hero.Collision(key))
                 {
                     hero.currentKeys++;
+                    winSound.Play();
                     keys.Remove(key);
+
+                    // Check win condition
+                    if (hero.currentKeys == totalKeys)
+                    {
+                        winArea.size = 25;
+                    }
+
                     break;
                 }
             }
@@ -231,6 +248,7 @@ namespace WorldsHardestGame
                     if (hero.Collision(ball))
                     {
                         hero.Restart();
+                        deathSound.Play();
                         deathsLabel.Text = $"Deaths: {hero.deaths}";
                     }
                 }
@@ -240,9 +258,7 @@ namespace WorldsHardestGame
             // Check for collision with win area
             if (hero.Collision(winArea))
             {
-                // Play Win Sound
-
-                // Move to win screen
+                GameWin();
             }
 
 
@@ -250,10 +266,37 @@ namespace WorldsHardestGame
             Refresh();
         }
 
+        public async void GameWin()
+        {
+            // Stop Game Loop
+            gameLoop.Stop();
+
+            // Play Win Sound
+            winSound.Play();
+
+            // Little Delay
+            await Task.Delay(500);
+
+            // Set Value of deaths
+            WinScreen.deaths = hero.deaths;
+
+            // Change to win screen
+            Form1.ChangeScreen(this, new WinScreen());
+        }
+
         private void posLabel_Click(object sender, EventArgs e)
         {
             // Toggle Debug Text when clicked on
             posLabel.Visible = false;
+        }
+
+        private void backLabel_Click(object sender, EventArgs e)
+        {
+            // Stop Loop
+            gameLoop.Stop();
+
+            // Return to main menu
+            Form1.ChangeScreen(this, new MenuScreen());
         }
 
         private void GameScreen_KeyDown(object sender, KeyEventArgs e)
@@ -315,7 +358,7 @@ namespace WorldsHardestGame
                 e.Graphics.FillRectangle(wallBrush, floor.x, floor.y, floor.width, floor.height);
             }
 
-            // Print Keys
+            // Print Keys for UI
             for (int i = 0; i < totalKeys; i++)
             {
                 if (i < hero.currentKeys) // if key is found

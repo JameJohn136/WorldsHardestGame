@@ -10,17 +10,23 @@ using System.Windows.Forms;
 
 namespace WorldsHardestGame
 {
-    public partial class MenuScreen : UserControl
+    public partial class WinScreen : UserControl
     {
-        public MenuScreen()
+        public static int deaths;
+        public WinScreen()
         {
             InitializeComponent();
+            DisplayInfo();
         }
 
-        private void startButton_Click(object sender, EventArgs e)
+        private void DisplayInfo()
+        {
+            deathLabel.Text = $"Deaths: {deaths}";
+        }
+
+        private void retryButton_Click(object sender, EventArgs e)
         {
             Form1.ChangeScreen(this, new GameScreen());
-
         }
 
         private void exitButton_Click(object sender, EventArgs e)
