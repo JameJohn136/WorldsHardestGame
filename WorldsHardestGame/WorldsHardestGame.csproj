@@ -121,5 +121,8 @@
   <ItemGroup>
     <None Include="Resources\Key Sprite.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\keyNull.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
